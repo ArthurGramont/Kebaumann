@@ -59,7 +59,7 @@ def commander_kebab():
             choix.append(sauces[index])
 
     is_vegetarien = not any(viande in choix for viande in viandes) and not any(poisson in choix for poisson in poissons)
-    is_pescetarien = not any(poisson in choix for poisson in poissons)
+    is_pescetarien = any(poisson in choix for poisson in poissons)
 
     print("\n=== Récapitulatif de votre commande ===")
 
