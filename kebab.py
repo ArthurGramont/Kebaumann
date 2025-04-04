@@ -1,3 +1,19 @@
+class Ingredient:
+    def __init__(self, name):
+        self.name = name
+
+    def __str__(self):
+        return self.name
+
+
+class NullIngredient(Ingredient):
+    def __init__(self):
+        super().__init__("Null")
+
+    def __str__(self):
+        return ""
+
+
 def menu():
     print("=== Bonjour et bienvenue chez Kebaumann ===")
     choix = 0
@@ -8,7 +24,8 @@ def menu():
     while arret == 1:
         recap(ingredients)
         print("\nSouhaitez-vous effectuer l'une de ces actions ? ")
-        actions = ["Doubler le fromage", "Retirer les oignons", "Ajouter un supplément", "Confirmer la commande"]
+        actions = ["Doubler le fromage", "Retirer les oignons", "Ajouter un supplément",
+                   "Fusionner avec un autre kebab", "Confirmer la commande"]
         for i, action in enumerate(actions, 1):
             print(f"{i}- {action}")
 
@@ -24,9 +41,12 @@ def menu():
             retirer_oignons(ingredients)
         elif choix == 3:
             ajouter_supplement(ingredients)
+        elif choix == 4:
+            ingredients = fusionner_kebabs(ingredients)
         else:
             confirmer_commande()
             arret = 0
+
 
 def choisir_kebab():
     choixKebab = []
@@ -48,13 +68,14 @@ def choisir_kebab():
         choix = commander_kebab_personnalise()
         return choix
     elif choixKebab[0] == kebabs[1]:
-        choix = ["Salade", "Fromage", "Viande"]
+        choix = [Ingredient("Salade"), Ingredient("Fromage"), Ingredient("Viande")]
         print("Vous avez choisi le kebab Fromage")
         return choix
     else:
-        choix = ["Tomates", "Salade", "Oignons", "Viande"]
+        choix = [Ingredient("Tomates"), Ingredient("Salade"), Ingredient("Oignons"), Ingredient("Viande")]
         print("Vous avez choisi le kebab Classique")
         return choix
+
 
 def recap(choix):
     print("\n=== Récapitulatif de votre commande ===")
@@ -67,26 +88,27 @@ def recap(choix):
         print("Vous n'avez sélectionné aucun ingrédient!")
         return
 
+
 def doubler_fromage(choix):
     confirmation = input("\nVoulez vous doubler le fromage ? (o/n): ").lower()
     if confirmation == "o" or confirmation == "oui":
         i = 0
         while i < len(choix):
-            if choix[i] == "Fromage":
-                choix.insert(i + 1, "Fromage")
+            if choix[i].name == "Fromage":
+                choix.insert(i + 1, Ingredient("Fromage"))
                 i += 1
             i += 1
 
     return choix
 
+
 def retirer_oignons(choix):
     confirmation = input("\nVoulez vous retirer les oignons ? (o/n): ").lower()
     if confirmation == "o" or confirmation == "oui":
-        for ingredient in choix:
-            if ingredient == "Oignons":
-                choix.remove(ingredient)
+        choix = [ingredient for ingredient in choix if ingredient.name != "Oignons"]
 
     return choix
+
 
 def ajouter_supplement(choix):
     choixSupplement = ["Fromage", "Oignons", "Salade", "Maïs", "Sauce blanche", "Sauce Algérienne"]
@@ -98,14 +120,33 @@ def ajouter_supplement(choix):
     for char in list:
         if char.isdigit() and 1 <= int(char) <= len(choixSupplement):
             index = int(char) - 1
-            choix.append(choixSupplement[index])
+            choix.append(Ingredient(choixSupplement[index]))
+
+
+def fusionner_kebabs(ingredients):
+    print("Choisissez le deuxième kebab à fusionner: ")
+    kebabs = ["Classique", "Fromage"]
+    for i, kebab in enumerate(kebabs, 1):
+        print(f"{i}- {kebab}")
+
+    selection_kebab = input("Votre sélection: ")
+    if selection_kebab.isdigit() and 1 <= int(selection_kebab) <= len(kebabs):
+        index = int(selection_kebab) - 1
+        if kebabs[index] == "Classique":
+            ingredients += [Ingredient("Tomates"), Ingredient("Salade"), Ingredient("Oignons"), Ingredient("Viande")]
+        elif kebabs[index] == "Fromage":
+            ingredients += [Ingredient("Salade"), Ingredient("Fromage"), Ingredient("Viande")]
+
+    return ingredients
+
 
 def confirmer_commande():
-    confirmation = input("\nÊtes vous bien sûrs de vouloir confirmer votre commande ? (o/n): ").lower()
+    confirmation = input("\nÊtes-vous bien sûrs de vouloir confirmer votre commande ? (o/n): ").lower()
     if confirmation == "o" or confirmation == "oui":
         print("Votre commande a été validée et sera prête dans 10 minutes.")
     else:
         print("Commande annulée !")
+
 
 def commander_kebab_personnalise():
     choix = []
@@ -122,7 +163,7 @@ def commander_kebab_personnalise():
     for char in list:
         if char.isdigit() and 1 <= int(char) <= len(crudites):
             index = int(char) - 1
-            choix.append(crudites[index])
+            choix.append(Ingredient(crudites[index]))
 
     print(
         "\nChoisissez votre viande (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
@@ -135,7 +176,7 @@ def commander_kebab_personnalise():
     for char in list:
         if char.isdigit() and 1 <= int(char) <= len(viandes):
             index = int(char) - 1
-            choix.append(viandes[index])
+            choix.append(Ingredient(viandes[index]))
 
     print(
         "\nChoisissez votre poisson (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
@@ -148,7 +189,7 @@ def commander_kebab_personnalise():
     for char in list:
         if char.isdigit() and 1 <= int(char) <= len(poissons):
             index = int(char) - 1
-            choix.append(poissons[index])
+            choix.append(Ingredient(poissons[index]))
 
     print(
         "\nChoisissez vos compléments (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
@@ -161,7 +202,7 @@ def commander_kebab_personnalise():
     for char in list:
         if char.isdigit() and 1 <= int(char) <= len(complements):
             index = int(char) - 1
-            choix.append(complements[index])
+            choix.append(Ingredient(complements[index]))
 
     print(
         "\nChoisissez vos sauces (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
@@ -174,10 +215,12 @@ def commander_kebab_personnalise():
     for char in list:
         if char.isdigit() and 1 <= int(char) <= len(sauces):
             index = int(char) - 1
-            choix.append(sauces[index])
+            choix.append(Ingredient(sauces[index]))
 
-    is_vegetarien = not any(viande in choix for viande in viandes) and not any(poisson in choix for poisson in poissons)
-    is_pescetarien = any(poisson in choix for poisson in poissons) and not any(viande in choix for viande in viandes)
+    is_vegetarien = not any(ingredient.name in viandes for ingredient in choix) and not any(
+        ingredient.name in poissons for ingredient in choix)
+    is_pescetarien = any(ingredient.name in poissons for ingredient in choix) and not any(
+        ingredient.name in viandes for ingredient in choix)
 
     print(
         f"\nVotre kebab est {'végétarien' if is_vegetarien else 'avec viande ou poisson, donc il n\'est pas végétarien'}.")
@@ -189,6 +232,7 @@ def commander_kebab_personnalise():
         print("\nVotre kebab personnalisé est validé")
 
     return choix
+
 
 if __name__ == "__main__":
     menu()
