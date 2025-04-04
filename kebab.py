@@ -3,63 +3,68 @@ def commander_kebab():
 
     choix = []
 
-    print("\nChoisissez vos crudités (tapez les numéros correspondants):")
-    crudites = ["Tomates", "Salade", "Oignon"]
+    print("\nChoisissez vos crudités (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
+    crudites = ["Tomates", "Salade", "Oignons", "Patates", "Carottes", "Oignons rouge", "Courgettes", "Radis", "Choux", "Coleslaw"]
     for i, crudite in enumerate(crudites, 1):
         print(f"{i}- {crudite}")
 
     selection_crudites = input("Votre sélection: ")
-    for char in selection_crudites:
+    list = selection_crudites.split(" ")
+    for char in list:
         if char.isdigit() and 1 <= int(char) <= len(crudites):
             index = int(char) - 1
             choix.append(crudites[index])
 
-    print("\nChoisissez votre viande (tapez les numéros correspondants):")
+    print("\nChoisissez votre viande (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
     viandes = ["Poulet", "Boeuf", "Agneau"]
     for i, viande in enumerate(viandes, 1):
         print(f"{i}- {viande}")
 
     selection_viandes = input("Votre sélection: ")
-    for char in selection_viandes:
+    list = selection_viandes.split(" ")
+    for char in list:
         if char.isdigit() and 1 <= int(char) <= len(viandes):
             index = int(char) - 1
             choix.append(viandes[index])
             
-    print("\nChoisissez votre poisson (tapez les numéros correspondants):")
+    print("\nChoisissez votre poisson (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
     poissons = ["Thon", "Saumon", "Cabillaud"]
     for i, poisson in enumerate(poissons, 1):
         print(f"{i}- {poisson}")
 
     selection_poissons = input("Votre sélection: ")
-    for char in selection_poissons:
+    list = selection_poissons.split(" ")
+    for char in list:
         if char.isdigit() and 1 <= int(char) <= len(poissons):
             index = int(char) - 1
             choix.append(poissons[index])
 
-    print("\nChoisissez vos compléments (tapez les numéros correspondants):")
+    print("\nChoisissez vos compléments (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
     complements = ["Oeufs", "Fromage"]
     for i, complement in enumerate(complements, 1):
         print(f"{i}- {complement}")
 
     selection_complements = input("Votre sélection: ")
-    for char in selection_complements:
+    list = selection_complements.split(" ")
+    for char in list:
         if char.isdigit() and 1 <= int(char) <= len(complements):
             index = int(char) - 1
             choix.append(complements[index])
 
-    print("\nChoisissez vos sauces (tapez les numéros correspondants):")
+    print("\nChoisissez vos sauces (tapez les numéros correspondants, il est possible d'avoir plusieurs ingrédients) - veillez à bien mettre un espace entre chaque ingrédient:")
     sauces = ["Blanche", "Samouraï", "Algérienne", "Ketchup", "Harissa"]
     for i, sauce in enumerate(sauces, 1):
         print(f"{i}- {sauce}")
 
     selection_sauces = input("Votre sélection: ")
-    for char in selection_sauces:
+    list = selection_sauces.split(" ")
+    for char in list:
         if char.isdigit() and 1 <= int(char) <= len(sauces):
             index = int(char) - 1
             choix.append(sauces[index])
 
     is_vegetarien = not any(viande in choix for viande in viandes) and not any(poisson in choix for poisson in poissons)
-    is_pescetarien = not any(poisson in choix for poisson in poissons)
+    is_pescetarien = any(poisson in choix for poisson in poissons) and not any(viande in choix for viande in viandes)
 
     print("\n=== Récapitulatif de votre commande ===")
 
@@ -72,7 +77,7 @@ def commander_kebab():
         print(f"- {ingredient}")
 
     print(f"\nVotre kebab est {'végétarien' if is_vegetarien else 'avec viande ou poisson, donc il n\'est pas végétarien'}.")
-    print(f"\nVotre kebab est {'péscétarien' if is_pescetarien else 'avec poisson, donc il n\'est pas péscétarien'}.")
+    print(f"\nVotre kebab est {'péscétarien' if is_pescetarien else 'sans poisson ou avec viande, donc il n\'est pas péscétarien'}.")
 
     confirmation = input("\nConfirmez-vous votre commande? (o/n): ").lower()
     if confirmation == 'o' or confirmation == 'oui':
