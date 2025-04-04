@@ -59,7 +59,7 @@ def commander_kebab():
             choix.append(sauces[index])
 
     is_vegetarien = not any(viande in choix for viande in viandes) and not any(poisson in choix for poisson in poissons)
-    is_pescetarien = any(poisson in choix for poisson in poissons)
+    is_pescetarien = any(poisson in choix for poisson in poissons) and not any(viande in choix for viande in viandes) 
 
     print("\n=== Récapitulatif de votre commande ===")
 
@@ -72,7 +72,7 @@ def commander_kebab():
         print(f"- {ingredient}")
 
     print(f"\nVotre kebab est {'végétarien' if is_vegetarien else 'avec viande ou poisson, donc il n\'est pas végétarien'}.")
-    print(f"\nVotre kebab est {'péscétarien' if is_pescetarien else 'avec poisson, donc il n\'est pas péscétarien'}.")
+    print(f"\nVotre kebab est {'péscétarien' if is_pescetarien else 'sans poissons donc pas péscétarien'}.")
 
     confirmation = input("\nConfirmez-vous votre commande? (o/n): ").lower()
     if confirmation == 'o' or confirmation == 'oui':
