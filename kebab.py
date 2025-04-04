@@ -3,26 +3,49 @@ def commander_kebab():
 
     choix = []
 
-    print("Choisissez vos crudités:")
+    print("\nChoisissez vos crudités (tapez les numéros correspondants):")
     crudites = ["Tomates", "Salade", "Oignon"]
-    for crudite in crudites:
-        reponse = input(f"Voulez-vous du/de la {crudite}? (o/n): ").lower()
-        if reponse == 'o' or reponse == 'oui':
-            choix.append(crudite)
+    for i, crudite in enumerate(crudites, 1):
+        print(f"{i}- {crudite}")
 
-    print("\nChoisissez votre viande:")
+    selection_crudites = input("Votre sélection: ")
+    for char in selection_crudites:
+        if char.isdigit() and 1 <= int(char) <= len(crudites):
+            index = int(char) - 1
+            choix.append(crudites[index])
+
+    print("\nChoisissez votre viande (tapez les numéros correspondants):")
     viandes = ["Poulet", "Boeuf", "Agneau"]
-    for viande in viandes:
-        reponse = input(f"Voulez-vous du {viande}? (o/n): ").lower()
-        if reponse == 'o' or reponse == 'oui':
-            choix.append(viande)
+    for i, viande in enumerate(viandes, 1):
+        print(f"{i}- {viande}")
 
-    print("\nChoisissez vos compléments:")
+    selection_viandes = input("Votre sélection: ")
+    for char in selection_viandes:
+        if char.isdigit() and 1 <= int(char) <= len(viandes):
+            index = int(char) - 1
+            choix.append(viandes[index])
+
+    print("\nChoisissez vos compléments (tapez les numéros correspondants):")
     complements = ["Oeufs", "Fromage"]
-    for complement in complements:
-        reponse = input(f"Voulez-vous du/de la {complement}? (o/n): ").lower()
-        if reponse == 'o' or reponse == 'oui':
-            choix.append(complement)
+    for i, complement in enumerate(complements, 1):
+        print(f"{i}- {complement}")
+
+    selection_complements = input("Votre sélection: ")
+    for char in selection_complements:
+        if char.isdigit() and 1 <= int(char) <= len(complements):
+            index = int(char) - 1
+            choix.append(complements[index])
+
+    print("\nChoisissez vos sauces (tapez les numéros correspondants):")
+    sauces = ["Blanche", "Samouraï", "Algérienne", "Ketchup", "Harissa"]
+    for i, sauce in enumerate(sauces, 1):
+        print(f"{i}- {sauce}")
+
+    selection_sauces = input("Votre sélection: ")
+    for char in selection_sauces:
+        if char.isdigit() and 1 <= int(char) <= len(sauces):
+            index = int(char) - 1
+            choix.append(sauces[index])
 
     is_vegetarien = not any(viande in choix for viande in viandes)
 
