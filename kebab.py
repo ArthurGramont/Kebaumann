@@ -3,7 +3,6 @@ def commander_kebab():
 
     choix = []
 
-    # Choix des crudités
     print("Choisissez vos crudités:")
     crudites = ["Tomates", "Salade", "Oignon"]
     for crudite in crudites:
@@ -11,7 +10,6 @@ def commander_kebab():
         if reponse == 'o' or reponse == 'oui':
             choix.append(crudite)
 
-    # Choix de la viande
     print("\nChoisissez votre viande:")
     viandes = ["Poulet", "Boeuf", "Agneau"]
     for viande in viandes:
@@ -19,7 +17,6 @@ def commander_kebab():
         if reponse == 'o' or reponse == 'oui':
             choix.append(viande)
 
-    # Choix des compléments
     print("\nChoisissez vos compléments:")
     complements = ["Oeufs", "Fromage"]
     for complement in complements:
