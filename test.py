@@ -17,9 +17,9 @@ class TestKebab(unittest.TestCase):
              patch('sys.stdout', new=io.StringIO()) as fake_out:
             commander_kebab()
             output = fake_out.getvalue()
-            self.assertIn("Ingrédients sélectionnés:", output)
-            self.assertIn("- Salade", output)
-            self.assertIn("- Boeuf", output)
+            recap = output.split("Ingrédients sélectionnés:")[-1]
+            self.assertIn("- Salade", recap)
+            self.assertIn("- Boeuf", recap)
             self.assertIn("Votre commande a été confirmée", output)
             self.assertIn("avec viande", output)
 
@@ -44,9 +44,9 @@ class TestKebab(unittest.TestCase):
              patch('sys.stdout', new=io.StringIO()) as fake_out:
             commander_kebab()
             output = fake_out.getvalue()
-            self.assertIn("Ingrédients sélectionnés:", output)
-            self.assertIn("- Tomates", output)
-            self.assertIn("- Fromage", output)
+            recap = output.split("Ingrédients sélectionnés:")[-1]
+            self.assertIn("- Tomates", recap)
+            self.assertIn("- Fromage", recap)
             # Vérifier que le kebab est considéré végétarien
             self.assertIn("végétarien", output)
             self.assertIn("Votre commande a été confirmée", output)
@@ -77,11 +77,24 @@ class TestKebab(unittest.TestCase):
              patch('sys.stdout', new=io.StringIO()) as fake_out:
             commander_kebab()
             output = fake_out.getvalue()
-            self.assertIn("- Salade", output)
-            self.assertNotIn("- Boeuf", output)
-            self.assertIn("- Oeufs", output)
-            self.assertIn("- Blanche", output)
+            recap = output.split("Ingrédients sélectionnés:")[-1]
+            self.assertIn("- Salade", recap)
+            self.assertNotIn("- Boeuf", recap)
+            self.assertIn("- Oeufs", recap)
+            self.assertIn("- Blanche", recap)
             self.assertIn("Votre commande a été confirmée", output)
+
+def flatten_tests(suite):
+    """Fonction utilitaire pour aplatir une suite de tests."""
+    tests = []
+    for item in suite:
+        if item is None:
+            continue
+        if isinstance(item, unittest.TestSuite):
+            tests.extend(flatten_tests(item))
+        else:
+            tests.append(item)
+    return tests
 
 if __name__ == '__main__':
     # Charger et exécuter les tests
@@ -91,20 +104,25 @@ if __name__ == '__main__':
     result = runner.run(suite)
 
     # Récupérer les noms de tests échoués (failures + erreurs)
-    failed_tests = [str(test[0]) for test in result.failures + result.errors]
+    failed_tests = [t.id() for t, _ in (result.failures + result.errors)]
 
-    # Récupérer tous les noms de tests du suite
-    all_tests = []
-    for test in suite:
-        all_tests.append(str(test))
+    # Récupérer tous les noms de tests de la suite en l'aplatissant
+    all_tests = [test.id() for test in flatten_tests(suite)]
 
     # Les tests réussis sont ceux qui ne figurent pas dans la liste des tests échoués
     passed_tests = [test for test in all_tests if test not in failed_tests]
 
     print("\n=== Résumé des tests ===")
-    print("Tests réussis:")
-    for test in passed_tests:
-        print(" - " + test)
-    print("Tests échoués:")
-    for test in failed_tests:
-        print(" - " + test)
+    if passed_tests:
+        print("Tests réussis:")
+        for test in passed_tests:
+            print(" - " + test)
+    else:
+        print("Aucun test réussi.")
+
+    if failed_tests:
+        print("\nTests échoués:")
+        for test in failed_tests:
+            print(" - " + test)
+    else:
+        print("\nAucun test échoué.")
